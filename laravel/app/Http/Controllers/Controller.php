@@ -24,4 +24,9 @@ class Controller extends BaseController
     {
         return $this->uploadService->history($request);
     }
+
+    public function search(Request $request)
+    {
+        return $this->uploadService->search($request);
+    }
 }

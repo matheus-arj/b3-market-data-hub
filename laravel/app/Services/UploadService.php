@@ -110,4 +110,18 @@ class UploadService
         return response()->json($query->get());
     }
 
+     public function search(Request $request)
+    {
+        $query = Record::query();
+
+        if ($request->has('TckrSymb')) {
+            $query->where('TckrSymb', $request->TckrSymb);
+        }
+
+        if ($request->has('RptDt')) {
+            $query->where('RptDt', $request->RptDt);
+        }
+
+        return response()->json($query->paginate(30));
+    }
 }
