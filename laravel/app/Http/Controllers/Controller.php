@@ -19,4 +19,9 @@ class Controller extends BaseController
     {
         return $this->uploadService->upload($request);
     }
+
+    public function history(Request $request)
+    {
+        return $this->uploadService->history($request);
+    }
 }
