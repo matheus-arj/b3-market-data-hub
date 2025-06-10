@@ -1,75 +1,76 @@
-# 🚀 B3 Market Data Hub
-Este projeto é um hub de dados completo para "Cadastros de Instrumentos" da B3. Ele integra uma API backend em Laravel para upload de arquivos, um worker Python para processamento de dados e um banco de dados MongoDB para armazenamento.
+# 🚀 B3 Market Data Hub  
+**Hub de dados para cadastro de instrumentos financeiros da B3, integrando API, processamento em Python e armazenamento MongoDB.**
+Este projeto foi desenvolvido como parte de um processo seletivo para a empresa **OliveiraTrust**. Ele demonstra habilidades em integração de APIs, processamento de dados e utilização de tecnologias modernas.
 
-## ⚙️ Funcionalidade do Projeto
-O sistema foi desenvolvido para gerenciar e estruturar informações cruciais sobre instrumentos financeiros:
+## 📌 Visão Geral  
+O **B3 Market Data Hub** é uma solução que centraliza e disponibiliza dados financeiros da B3, permitindo a extração e organização de informações sobre os instrumentos negociados na bolsa.<br>
+O sistema facilita a análise e processamento dos arquivos de Cadastro de Instrumentos, que devem ser baixados manualmente do site da B3 e enviados para extração. A partir desses dados, ele proporciona uma base confiável para análises financeiras, desenvolvimento de estratégias de investimento e integração com sistemas de trading.
 
-- **API de Ingestão (Laravel):** Permite o upload seguro de arquivos de cadastro da B3 nos formatos .csv e .xlsx.
-- **Processamento de Dados (Python Worker):** Monitora os uploads, extrai dados essenciais como tickers, ISINs, nomes de empresas e categorias de ativos, e os normaliza.
-- **Armazenamento Centralizado (MongoDB):** Guarda os dados processados de forma organizada, tornando-os consultáveis e prontos para uso.
-
-## 🎯 Propósito
-O B3 Market Data Hub centraliza e disponibiliza informações detalhadas e atualizadas sobre os instrumentos negociados na bolsa. Esta capacidade é fundamental para análises financeiras, desenvolvimento de estratégias de investimento e integração com sistemas de trading ou relatórios, fornecendo uma base de dados precisa e automatizada.
-
-## 🚀 Tecnologias utilizadas
-
-- PHP 8 + Laravel
-- Python 3.10+
-- MongoDB
-- Docker + Docker Compose
-- Watchdog (Python)
-- Pandas (Python)
+## ⚙️ Funcionalidade do Projeto  
+- **API de Ingestão (Laravel)** → Upload seguro de arquivos `.csv` e `.xlsx`.  
+- **Processamento de Dados (Python Worker)** → Monitoramento e extração de dados essenciais.  
+- **Armazenamento Centralizado (MongoDB)** → Dados organizados e prontos para consulta.  
 
 ---
 
-## 📁 Estrutura do Projeto
-```
+## 🚀 Tecnologias utilizadas  
+- **PHP 8 + Laravel**  
+- **Python 3.10+**  
+- **MongoDB**  
+- **Docker + Docker Compose**  
+- **Watchdog (Python)**  
+- **Pandas (Python)**  
+
+---
+
+## 📁 Estrutura do Projeto  
+```sh
 .
 ├── laravel/ # Projeto Laravel (upload e API de histórico)
 ├── python/
-│ └── worker/
-│ └── main.py # Script principal do worker
+│   └── worker/
+│       └── main.py # Script principal do worker
 ├── docker/ # Dockerfiles e configs
 ├── docker-compose.yml
 └── README.md
-.
 ```
 
-## 📦 Como executar o projeto
+## 🔧 Como executar o projeto
 
-### 1. Suba os containers
+### 1️⃣ Clone o repositório e acesse a pasta do projeto:
+```Bash
+git clone https://github.com/matheus-arj/b3-market-data-hub.git
+cd b3-market-data-hub
 ```
+
+### 2️⃣ Configure as variáveis de ambiente:
+```Bash
+cp laravel/.env.example laravel/.env
+```
+
+### 3️⃣ Suba os containers
+**🔹 Necessário Docker e Docker Compose instalados.**
+
+```sh
 docker-compose up --build
 ```
-### Este comando irá subir:
+Este comando irá subir: ✅ Laravel (PHP) ✅ MongoDB ✅ Worker Python ✅ Nginx
 
-Laravel (PHP)<br>
-MongoDB<br>
-Worker Python
+### 4️⃣ Executar o Worker manualmente
 
-## ⚙️ Execução do Worker
-#### 🧪 Executar o Worker Manualmente
-1. Crie e ative um ambiente virtual
-```
+```sh
 python3 -m venv venv
 source venv/bin/activate  # Linux/macOS
-# ou
 venv\Scripts\activate     # Windows
-```
 
-2. Instale as dependências:
-```
 pip install -r python/worker/requirements
-```
-
-3. Execute o worker:
-```
 python python/worker/main.py
 ```
 
 ## 📝 Endpoints da API Laravel
-### Upload de arquivos
-```
+### 🚀 Upload de arquivos
+API responsável pelo upload de arquivos de **Cadastro de Instrumentos da B3**.
+```Http
 POST /api/upload
 Content-Type: multipart/form-data
 ```
@@ -79,22 +80,20 @@ Content-Type: multipart/form-data
 | file  | .csv/.xlsx | ✅ Sim       |
 
 Exemplo de cURL:
-```
+```sh
 curl -X POST http://localhost:8080/api/upload \
   -F 'file=@/caminho/do/seu/arquivo.csv'
 ```
-💡 Nota: O Worker Python precisa estar em execução para processar os arquivos após o upload.
+#### **⚠️ O Worker Python precisa estar em execução para processar os arquivos após o upload.**
 
-### History API
-```
+## 🔍 History API
+Retorna os dados dos arquivos enviados, permitindo consulta por nome do arquivo e data de referência.
+```Http
 GET /api/history
 ```
-Query Params opcionais:
-- original_name
-- reference_date
-
-#### Exemplo de Saída:
-```json
+#### Parâmetros opcionais: original_name, reference_date
+Exemplo de resposta:
+```Json
 [
   {
     "original_name": "InstrumentsConsolidatedFile_20250509_1.csv",
@@ -108,67 +107,38 @@ Query Params opcionais:
 ]
 ```
 
-Exemplo de cURL:
-- 🔍 Todos os Uploads
+## 🔍 Search API
+Consulta e retorna dados extraídos do documento Cadastro de Instrumentos da B3, incluindo ISIN, ticker, nome da empresa e categoria do ativo.
+```Http
+GET /api/search
 ```
-curl -X GET http://localhost:8080/api/history
-```
-
-- 🔍 Buscar uploads filtrando por original_name
-```
-curl -G http://localhost:8080/api/history \
-  --data-urlencode "original_name=InstrumentsConsolidatedFile_20250509_1.csv"
-```
-
-- 🔍 Buscar uploads filtrando por reference_date
-```
-curl -G http://localhost:8080/api/history \
-  --data-urlencode "reference_date=2025-05-09"
-```
-
-#### Search API
-Exemplo de saída:
-```json
-        {
-            "RptDt": "2025-05-07",
-            "TckrSymb": "003H11",
-            "MktNm": "EQUITY-CASH",
-            "SctyCtgyNm": "FUNDS",
-            "ISIN": "BR003HCTF006",
-            "CrpnNm": "KINEA CO-INVESTIMENTO FDO INV IMOB",
-            "id": "6822cc133f4a5beefec742bd"
-        },
-        {
-            "RptDt": "2025-05-07",
-            "TckrSymb": "A1AP34R",
-            "MktNm": "EQUITY-CASH",
-            "SctyCtgyNm": "BDR",
-            "ISIN": "BRA1APBDR001",
-            "CrpnNm": "ADVANCE AUTO PARTS INC",
-            "id": "6822cc133f4a5beefec742c3"
-        },
+Exemplo de resposta:
+```Json
+    {
+        "RptDt": "2025-06-06",
+        "TckrSymb": "0FEA11",
+        "MktNm": "EQUITY-CASH",
+        "SctyCtgyNm": "FUNDS",
+        "ISIN": "BR0FEACTF006",
+        "CrpnNm": "SPIM FUNDO DE INVESTIMENTO IMOBILIÁRIO",
+        "id": "6847a533b4e2f9f98ec0fdec"
+    },
 ```
 
 ## 🧠 Sobre o Worker Python
-O worker é responsável por:
-1. Observar a pasta laravel/public/uploads
-2. Detectar novos arquivos
-3. Ler os arquivos .csv ou .xlsx
-4. Extrair os campos:
-- RptDt
-- TckrSymb
-- MktNm
-- SctyCtgyNm
-- ISIN
-- CrpnNm
-5. Inserir os dados na coleção Record do MongoDB
+### O Worker é responsável por: 
+✅ Monitorar a pasta laravel/public/uploads <br>
+✅ Detectar e processar arquivos `.csv` e `.xlsx`<br>
+✅ Extrair os principais campos:
+`RptDt`
+`TckrSymb`
+`MktNm`
+`SctyCtgyNm`
+`ISIN`
+`CrpnNm`<br>
+✅ Inserir os dados na coleção Record do MongoDB
 
-## 💡 Informações úteis para o desenvolvimento da api:
-Você pode encontrar os arquivos para testar na URL abaixo, nela você vai encontrar um arquivo com uma quantidade aproximada de 75.000 linhas.
+## 💡 Arquivos para Teste
+Você pode encontrar arquivos de cadastro na URL abaixo, contendo aproximadamente 75.000 linhas: 🔗 [Dados públicos da B3](https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/consultas/boletim-diario/dados-publicos-de-produtos-listados-e-de-balcao/)
 
-URL: https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/consultas/boletim-diario/dados-publicos-de-produtos-listados-e-de-balcao/
-
-Descrição: Clique em uma data, clique em "Cadastro de Instrumentos (Listado)" e clique em "Baixar arquivo"
-
-## 📝 Variavéis de ambiente
-O arquivo **.env.example** deverá ser copiado em **.env** dentro do projeto **laravel**.
+Para baixar: 1️⃣ Clique em uma data 2️⃣ Clique em "Cadastro de Instrumentos (Listado)" 3️⃣ Baixe o arquivo
