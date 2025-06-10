@@ -1,20 +1,15 @@
 # 🚀 B3 Market Data Hub
 Este projeto é um hub de dados completo para "Cadastros de Instrumentos" da B3. Ele integra uma API backend em Laravel para upload de arquivos, um worker Python para processamento de dados e um banco de dados MongoDB para armazenamento.
 
-## Funcionalidade do Projeto
+## ⚙️ Funcionalidade do Projeto
 O sistema foi desenvolvido para gerenciar e estruturar informações cruciais sobre instrumentos financeiros:
 
 - **API de Ingestão (Laravel):** Permite o upload seguro de arquivos de cadastro da B3 nos formatos .csv e .xlsx.
 - **Processamento de Dados (Python Worker):** Monitora os uploads, extrai dados essenciais como tickers, ISINs, nomes de empresas e categorias de ativos, e os normaliza.
 - **Armazenamento Centralizado (MongoDB):** Guarda os dados processados de forma organizada, tornando-os consultáveis e prontos para uso.
 
-## Propósito
+## 🎯 Propósito
 O B3 Market Data Hub centraliza e disponibiliza informações detalhadas e atualizadas sobre os instrumentos negociados na bolsa. Esta capacidade é fundamental para análises financeiras, desenvolvimento de estratégias de investimento e integração com sistemas de trading ou relatórios, fornecendo uma base de dados precisa e automatizada.
-
-
-<!-- # 📂 Laravel File Upload & Python Worker Integration
-
-Este projeto integra uma API backend em **Laravel** para upload de arquivos (`.csv`, `.xlsx`) com um **worker Python** que monitora os arquivos enviados, extrai informações específicas e as insere em um banco de dados **MongoDB**. -->
 
 ## 🚀 Tecnologias utilizadas
 
@@ -52,7 +47,7 @@ Laravel (PHP)<br>
 MongoDB<br>
 Worker Python
 
-## Execução do Worker
+## ⚙️ Execução do Worker
 #### 🧪 Executar o Worker Manualmente
 1. Crie e ative um ambiente virtual
 ```
@@ -175,5 +170,5 @@ URL: https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-
 
 Descrição: Clique em uma data, clique em "Cadastro de Instrumentos (Listado)" e clique em "Baixar arquivo"
 
-## Variavéis de ambiente
+## 📝 Variavéis de ambiente
 O arquivo **.env.example** deverá ser copiado em **.env** dentro do projeto **laravel**.
